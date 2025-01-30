@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="User account registration" />
+    <link rel="icon" href="favicon.ico" />
+
+    <title>Registration Page</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-dark: #0a0e17;
+            --accent-green: #00ff88;
+            --accent-red: #ff4d4d;
+            --text-primary: #ffffff;
+            --text-secondary: #8b95a5;
+        }
+
+        body {
+            background-color: var(--primary-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .registration-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .registration-box {
+            background: #121825;
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 12px 24px rgba(0, 255, 136, 0.1);
+            border: 1px solid #1f2937;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .registration-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .registration-header h4 {
+            font-size: 1.8rem;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group.input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group-addon {
+            background: #1f2937 !important;
+            border: 1px solid #2d3748 !important;
+            color: var(--accent-green) !important;
+            min-width: 45px;
+        }
+
+        .form-control {
+            background: #1f2937 !important;
+            border: 1px solid #2d3748 !important;
+            color: var(--text-primary) !important;
+            height: 45px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1) !important;
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, var(--accent-green) 0%, #00c774 100%);
+            border: none;
+            padding: 12px 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div th:replace="/navbar :: header"> </div>
+
+    <div class="registration-container">
+        <div class="registration-box">
+            <div class="registration-header">
+                <h4>Create Account</h4>
+            </div>
+
+            <form autocomplete="off" th:action="@{/register.htm}" th:object="${user}" method="post" id="registrationForm">
+
+                <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}" style="display: none;"></div>
+
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="fas fa-user"></i></span>
+                    <input type="text" th:field="*{firstName}" placeholder="First Name" class="form-control" required />
+                </div>
+
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="fas fa-user"></i></span>
+                    <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control" required />
+                </div>
+
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="fas fa-envelope"></i></span>
+                    <input type="email" th:field="*{email}" placeholder="Email Address" class="form-control" required />
+                </div>
+
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="fas fa-lock"></i></span>
+                    <input type="password" th:field="*{password}" placeholder="Password" class="form-control" required minlength="8" />
+                </div>
+
+                <button type="submit" id="submitButton" class="btn btn-primary btn-register">Create Account</button>
+
+                <p class="text-center mt-3" style="color: var(--text-secondary);">
+                    Already have an account? <a th:href="@{/login.htm}">Sign In</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#registrationForm').on('submit', function(e) {
+                const password = $('input[type="password"]').val();
+                const $errorAlert = $('.alert-danger');
+
+                $errorAlert.hide().removeClass('shake');
+
+                if (password.length < 8) {
+                    $errorAlert.text('Password must be at least 8 characters').show().addClass('shake');
+                    e.preventDefault();
+                    return false;
+                }
+
+                $('#submitButton').html(
+                    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating Account...'
+                ).prop('disabled', true);
+
+                return true;
+            });
+        });
+    </script>
+</body>
+</html>

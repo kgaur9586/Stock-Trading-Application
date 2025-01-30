@@ -1,0 +1,142 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Bootstrap 3 links -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <title>Transaction Summary</title>
+
+    <style>
+        :root {
+            --primary-color: #2A85FF;
+            --dark-bg: #0F172A;
+            --card-bg: #1E293B;
+            --text-light: #F8FAFC;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, var(--dark-bg), #1E293B);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .jumbotron {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-top: 20px;
+        }
+
+        .transaction-table {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .transaction-table table {
+            margin-bottom: 0;
+            color: var(--text-light);
+        }
+
+        .transaction-table thead th {
+            background: rgba(42, 133, 255, 0.15);
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            font-weight: 600;
+        }
+
+        .transaction-table td, 
+        .transaction-table th {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 1.2rem;
+            vertical-align: middle;
+        }
+
+        .transaction-caption {
+            color: var(--primary-color);
+            font-size: 1.1em;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .total-row {
+            background: rgba(42, 133, 255, 0.1);
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: rgba(42, 133, 255, 0.15);
+            border: 1px solid var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .thank-you {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.2em;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="/navbar :: header"></div>
+
+    <div class="container" style="margin-top: 80px;">
+        <div class="jumbotron">
+            <div class="alert alert-success text-center">
+                <i class="fas fa-check-circle"></i> Congratulations, your transaction was successfully completed!
+            </div>
+
+            <!-- Sell Transaction -->
+            <div class="transaction-table">
+                <div class="transaction-caption">
+                    <i class="fas fa-coins"></i> Sell Transaction - ID: 
+                    <span th:text="${transactionSellId}"></span>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Stock Name</th>
+                            <th>Quantity</th>
+                            <th>Price/Stock</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="trade: ${tradeSellList}">
+                            <td th:text="${trade.stock.stockName}"></td>
+                            <td th:text="${trade.quantity}"></td>
+                            <td th:text="${'$' + trade.individualPrice}"></td>
+                            <td th:text="${'$' + (trade.quantity * trade.individualPrice)}"></td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="3" class="text-right">Service Charge</td>
+                            <td th:text="${'$' + serviceSellTax}"></td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="3" class="text-right">Total</td>
+                            <td th:text="${'$' + totalSellPrice}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="thank-you">
+                <i class="fas fa-handshake"></i> Thank you for your business!
+            </div>
+        </div>
+    </div>
+</body>
+</html>

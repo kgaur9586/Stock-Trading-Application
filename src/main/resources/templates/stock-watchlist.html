@@ -1,0 +1,190 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Existing Bootstrap 3 links -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <title>My Watchlist</title>
+    
+    <style>
+        :root {
+            --primary-color: #2A85FF;
+            --dark-bg: #0F172A;
+            --card-bg: #1E293B;
+            --text-light: #F8FAFC;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, var(--dark-bg), #1E293B);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .jumbotron {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-top: 20px;
+        }
+
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .table {
+            margin-bottom: 0;
+            color: var(--text-light);
+        }
+
+        .table thead th {
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            font-weight: 600;
+        }
+
+        .table td, .table th {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            vertical-align: middle;
+            padding: 1.2rem;
+        }
+
+        .selected {
+            background: rgba(42, 133, 255, 0.15) !important;
+        }
+
+        /* Remove hover effect on table rows */
+        .table-hover tbody tr:hover {
+            background-color: transparent;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 133, 255, 0.4);
+        }
+
+        .alert-info {
+            background: rgba(42, 133, 255, 0.15);
+            border: 1px solid var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .positive { color: var(--accent-green); }
+        .negative { color: var(--accent-red); }
+
+        @media (max-width: 768px) {
+            .table td, .table th {
+                padding: 0.8rem;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+
+    <script>
+        function inputChanged(event) {
+            const row = event.target.closest('tr');
+            row.classList.toggle('selected', event.target.checked);
+        }
+
+        $(document).ready(function () {
+            $('#checkBtn').click(function() {
+                const checked = $("input[type=checkbox]:checked").length;
+                if(!checked) {
+                    alert("Please select at least one stock to proceed.");
+                    return false;
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div th:replace="/navbar :: header"></div>
+
+    <div class="container" style="margin-top: 80px;">
+        <div class="jumbotron">
+            <h3 class="text-center mb-4"><i class="fas fa-star"></i> My Stock Watch List</h3>
+
+            <div th:if="${stockList.size() == 0}">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle"></i> No stocks in your watchlist
+                </div>
+            </div>
+
+            <div th:unless="${stockList.size() == 0}">
+                <form autocomplete="off" action="#" th:action="@{trade/watchlist.htm}" method="post" class="m-t" enctype="multipart/form-data">
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;"></th>
+                                    <th>Stock Name</th>
+                                    <th>Symbol</th>
+                                    <th>Price</th>
+                                    <th>Change</th>
+                                    <th>Market</th>
+                                    <th>Buy Price</th>
+                                    <th>Sell Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="stock: ${stockList}">
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" 
+                                                   id="check-${stock.stockSymbol}" 
+                                                   name="checkedRows" 
+                                                   th:value="${stock.stockSymbol}"
+                                                   onchange="inputChanged(event)">
+                                            <label class="custom-control-label" for="check-${stock.stockSymbol}"></label>
+                                        </div>
+                                    </td>
+                                    <td th:text="${stock.stockName}"></td>
+                                    <td th:text="${stock.stockSymbol}"></td>
+                                    <td th:text="${'$' + stock.currentPrice}"></td>
+                                    <td th:class="${stock.change.startsWith('-')} ? 'negative' : 'positive'" 
+                                        th:text="${stock.change}"></td>
+                                    <td th:text="${stock.marketType}"></td>
+                                    <td th:text="${'$' + stock.buyingPrice}"></td>
+                                    <td th:text="${'$' + stock.sellingPrice}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-shopping-cart"></i> Buy Selected Stocks
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

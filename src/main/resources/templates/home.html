@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Add Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Existing Bootstrap 3 links -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <title>Stock Trading Platform</title>
+
+    <style>
+        :root {
+            --primary-color: #2A85FF;
+            --dark-bg: #0F172A;
+            --card-bg: #1E293B;
+            --text-light: #F8FAFC;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, var(--dark-bg), #1E293B);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .jumbotron {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            margin: 15px 0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .stock-card {
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .currency-badge {
+            background: rgba(42, 133, 255, 0.15);
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin: 10px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-watchlist {
+            background: var(--primary-color);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-watchlist:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 133, 255, 0.4);
+        }
+
+        .positive { color: var(--accent-green); }
+        .negative { color: var(--accent-red); }
+    </style>
+
+    <script>
+    function sayHello(symbol, event) {
+        event.preventDefault();
+        var search = {};
+        search["symbol"] = symbol;
+        $.ajax({
+            url: "/watchlist.htm",
+            cache: false,
+            type: "POST",
+            data: JSON.stringify(search),
+            dataType: "json",
+            traditional: true,
+            contentType: "application/json; charset=utf-8",
+            success: function () {
+                alert("Success!!!");
+            },
+            error: function () {
+                alert("success!");
+            }
+        });
+    }
+</script>
+</head>
+
+<body>
+    <div th:replace="/navbar :: header"></div>
+
+    <div class="container" style="margin-top: 80px;">
+        <!-- Currencies Section -->
+        <div class="jumbotron">
+            <h3 class="text-center">Top Currencies</h3>
+            <div class="row text-center">
+                <div th:each="element : ${currencies}" class="col-md-4">
+                    <div class="currency-badge">
+                        <h4 th:text="${element.key}"></h4>
+                        <p th:text="${element.value}" class="text-primary"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stocks Section -->
+        <div class="jumbotron">
+            <h3 class="text-center">Top Trending Stocks</h3>
+            <div class="row">
+                <div th:each="stock,iter : ${stocks}" class="col-12 col-md-4 col-sm-6">
+                    <div class="card stock-card">
+                        <img th:src="${logos[iter.index]}" class="img-responsive" style="height: 80px; margin: 0 auto;">
+                        <div class="card-body text-center">
+                            <h4 th:text="${stock.name}" class="card-title"></h4>
+                            <div class="card-text">
+                                <h3 th:text="'$' + ${stock.lastPrice}"></h3>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h4 th:class="${stock.percentChange.startsWith('-')} ? 'negative' : 'positive'" 
+                                            th:text="${stock.percentChange}"></h4>
+                                    </div>
+                                    <div class="col-xs-12" style="margin-top: 15px;">
+                                        <form>
+                                            <input type="submit" class="btn btn-info"
+                                                th:attr="onclick='javascript:sayHello(\''+${stock.symbol}+'\', event)'"
+                                                value="Add to Watchlist">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center" style="margin: 30px 0;">
+            <a href="https://kgaur9586.github.io/portfolio" class="text-muted" style="font-size: 0.9em;">© 2025 Kapil. All rights reserved.
+</a>
+        </div>
+    </div>
+</body>
+</html>

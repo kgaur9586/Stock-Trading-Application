@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Bank Account Management" />
+    <link rel="icon" href="favicon.ico" />
+
+    <title>Manage Accounts</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #2A85FF;
+            --dark-bg: #0F172A;
+            --card-bg: #1E293B;
+            --text-light: #F8FAFC;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, var(--dark-bg), #1E293B);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .account-container {
+            max-width: 700px;
+            margin: 80px auto;
+            padding: 30px;
+        }
+
+        .account-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 30px;
+        }
+
+        .account-title {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .fieldset-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .form-control {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-light);
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(42, 133, 255, 0.25);
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--accent-green);
+            color: var(--text-light);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--accent-red);
+            color: var(--text-light);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 133, 255, 0.4);
+        }
+
+        .form-text {
+            color: #64748b;
+            font-size: 0.9em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        select.form-control {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364758b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+    </style>
+
+    <script>
+        function checkInp() {
+            var x = document.forms["myForm"]["accountNumber"].value;
+            if (isNaN(x)) {
+                alert("Must input numbers in account number field");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+    <div th:replace="/navbar :: header"></div>
+
+    <div class="account-container">
+        <div class="account-card">
+            <h2 class="account-title"><i class="fas fa-university"></i> Manage Bank Accounts</h2>
+            
+            <form class="form-horizontal" name="myForm" autocomplete="off" action="#" onsubmit="return checkInp()" th:action="@{/update/bankAccount.htm}" th:object="${userBank}" method="post">
+                <div th:if="${errorMessage}" class="alert alert-danger text-center" th:text="${errorMessage}"></div>
+                <div th:if="${successMessage}" class="alert alert-success text-center" th:text="${successMessage}"></div>
+
+                <fieldset>
+                    <h3 class="fieldset-title"><i class="fas fa-info-circle"></i> Bank Details</h3>
+                    
+                    <div class="form-group">
+                        <label class="control-label">Account Number</label>
+                        <input type="text" class="form-control" th:field="*{accountNumber}" 
+                               required pattern=".{10,10}" 
+                               placeholder="Enter 10-digit account number">
+                        <small class="form-text">Please enter 10 digit account number</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Bank Name</label>
+                        <input type="text" class="form-control" th:field="*{bankName}" 
+                               required placeholder="Enter bank name">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Account Type</label>
+                        <select class="form-control" th:field="*{accountType}" required>
+                            <option value="Savings">Savings Account</option>
+                            <option value="Current">Current Account</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Add Account
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+</body>
+</html>
