@@ -35,6 +35,7 @@ public class HomePageService
     private RestTemplate restTemplate;
 
     // final String stockUri = "https://marketdata.websol.barchart.com/getQuote.json?apikey=b0ccbbb0dae9d39ce81f65718f0ecd10&symbols=AMZN,GOOG,AAPL,GOOG,NFLX,TSLA,FB,CSCO,ORCL,INTC,QCOM,EBAY,DELL,COST,MSFT,TWTR,AABA,SNAP,AMD,ATVI,ZNGA,WDC,BKNG&fields=fiftyTwoWkHigh%2CfiftyTwoWkHighDate%2CfiftyTwoWkLow%2CfiftyTwoWkLowDate";
+<<<<<<< HEAD
     final String stockUri1 = "https://marketdata.websol.barchart.com/getQuote.json?apikey=SPZW7DZ36OPSLXDH&symbols=AMZN,GOOG,AAPL,NFLX,TSLA,FB,CSCO,ORCL,INTC,QCOM,EBAY,DELL,COST,MSFT,TWTR,AABA,SNAP,AMD,ATVI,ZNGA&fields=fiftyTwoWkHigh%2CfiftyTwoWkHighDate%2CfiftyTwoWkLow%2CfiftyTwoWkLowDate&apikey=SPZW7DZ36OPSLXDH";
 
     final String stockUri2 = "https://marketdata.websol.barchart.com/getQuote.json?apikey=SPZW7DZ36OPSLXDH&symbols=WDC,BKNG,VZ,HPQ,SNE,W,BABA,JNJ,JPM,XOM,BAC,WMT,WFC,V,PG,BUD,T,UNH,HD,C&fields=fiftyTwoWkHigh%2CfiftyTwoWkHighDate%2CfiftyTwoWkLow%2CfiftyTwoWkLowDate&apikey=SPZW7DZ36OPSLXDH";
@@ -386,13 +387,84 @@ public class HomePageService
 //        } catch (ParseException e) {
 //            logger.error(e.toString());
 //        }
+=======
+    final String stockUri1 = "https://marketdata.websol.barchart.com/getQuote.json?apikey=b0ccbbb0dae9d39ce81f65718f0ecd10&symbols=AMZN,GOOG,AAPL,NFLX,TSLA,FB,CSCO,ORCL,INTC,QCOM,EBAY,DELL,COST,MSFT,TWTR,AABA,SNAP,AMD,ATVI,ZNGA&fields=fiftyTwoWkHigh%2CfiftyTwoWkHighDate%2CfiftyTwoWkLow%2CfiftyTwoWkLowDate";
+
+    final String stockUri2 = "https://marketdata.websol.barchart.com/getQuote.json?apikey=b0ccbbb0dae9d39ce81f65718f0ecd10&symbols=WDC,BKNG,VZ,HPQ,SNE,W,BABA,JNJ,JPM,XOM,BAC,WMT,WFC,V,PG,BUD,T,UNH,HD,C&fields=fiftyTwoWkHigh%2CfiftyTwoWkHighDate%2CfiftyTwoWkLow%2CfiftyTwoWkLowDate";
+
+
+
+    final String currencyUri = "https://www.worldtradingdata.com/api/v1/forex?base=USD&sort=newest&api_token=uRqeU8C651htqmF8iI5N6VvSBEIpTiQ5xvvKkz9Slsm1D9jFvIGdG97m0RpF";
+
+    public List<StockAPIBean> getTopStocks ()
+    {
+        List<StockAPIBean> stocks = new ArrayList<StockAPIBean>();
+
+        String result = this.restTemplate.getForObject(stockUri1, String.class);
+        Object obj = null;
+        JSONObject jo = null;
+        try {
+            obj = new JSONParser().parse(result);
+            jo = (JSONObject) obj;
+        } catch (ParseException e) {
+            logger.error(e.toString());
+            obj = null;
+            jo = null;
+        }
+
+        if (obj != null && jo != null) {
+            JSONArray ja = (JSONArray) jo.get("results");
+
+            Iterator itr2 = ja.iterator();
+
+            while (itr2.hasNext()) {
+
+                Map map = (Map) itr2.next();
+                ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
+                StockAPIBean pojo = mapper.convertValue(map, StockAPIBean.class);
+                stocks.add(pojo);
+            }
+        }
+
+        result = this.restTemplate.getForObject(stockUri2, String.class);
+        obj = null;
+        jo = null;
+        try {
+            obj = new JSONParser().parse(result);
+            jo = (JSONObject) obj;
+        } catch (ParseException e) {
+            logger.error(e.toString());
+            obj = null;
+            jo = null;
+        }
+
+        if (obj != null && jo != null) 
+        {
+            JSONArray ja = (JSONArray) jo.get("results");
+
+            Iterator itr2 = ja.iterator();
+
+            while (itr2.hasNext()) {
+
+                Map map = (Map) itr2.next();
+                ObjectMapper mapper = new ObjectMapper(); // jackson's objectmapper
+                StockAPIBean pojo = mapper.convertValue(map, StockAPIBean.class);
+                stocks.add(pojo);
+            }
+        }
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 
         saveAllStocks(stocks);
 
         logger.info("size::" + stocks.size());
         return stocks;
+<<<<<<< HEAD
     }
 
+=======
+
+    }
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 
     public void saveAllStocks(List<StockAPIBean> stocks)
     {
@@ -407,7 +479,11 @@ public class HomePageService
             }
             if (temp == null) 
             {
+<<<<<<< HEAD
                 this.homePageDAO.saveStock(stock);
+=======
+                //this.homePageDAO.saveStock(stock);
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
             } 
             else {
                 this.homePageDAO.updateStock(stock, temp.getId());
@@ -419,6 +495,7 @@ public class HomePageService
 
     }
 
+<<<<<<< HEAD
 ////    public Map<String , String> getTopCurrencies ()
 ////    {
 ////        String result = this.restTemplate.getForObject(currencyUri, String.class);
@@ -468,6 +545,27 @@ public class HomePageService
 
         // Creating and returning fake data instead of calling the API
         Map<String, String> resultMap = new HashMap<>();
+=======
+    public Map<String , String> getTopCurrencies ()
+    {
+        String result = this.restTemplate.getForObject(currencyUri, String.class);
+
+        net.sf.json.JSONObject json = (net.sf.json.JSONObject) JSONSerializer.toJSON( result );        
+        net.sf.json.JSONObject data = json.getJSONObject("data");
+        
+        Map<String,String> map = new HashMap<String,String>();
+        Iterator iter = data.keys();
+        
+        while(iter.hasNext())
+        {
+            String key = (String)iter.next();
+            String value = data.getString(key);
+            map.put(key,value);
+        }
+
+        Map<String,String> resultMap = new HashMap<String,String>();
+
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
         String eur = map.get("EUR");
         String jpy = map.get("JPY");
         String inr = map.get("INR");
@@ -477,9 +575,15 @@ public class HomePageService
         resultMap.put("Rupee", inr);
 
         return resultMap;
+<<<<<<< HEAD
     }
 
 
+=======
+        
+    }
+
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
     
 
 }

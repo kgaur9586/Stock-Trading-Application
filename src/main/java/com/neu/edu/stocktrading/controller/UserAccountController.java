@@ -56,7 +56,11 @@ public class UserAccountController
 
     @PostMapping(value = "/update/profile.htm")
     public ModelAndView updateProfile( HttpServletRequest request,
+<<<<<<< HEAD
             HttpServletResponse response, @ModelAttribute @Validated User user ,  BindingResult bindingResult) throws IllegalStateException, IOException {
+=======
+            HttpServletResponse response, @ModelAttribute("user") @Validated User user ,  BindingResult bindingResult) throws IllegalStateException, IOException {
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 
         logger.info("Inside updateProfile::"+user.toString());
         User updatedUser = this.userAccountService.updateProfile(user.getEmail() , user.getPhoneNumber());

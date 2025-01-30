@@ -49,6 +49,7 @@ public class ForecastDAO {
 
 			Map<Integer, Integer> map = wt.getStockToAmount();
 			logger.info("map::" + map);
+<<<<<<< HEAD
 			@SuppressWarnings("rawtypes")
 			Iterator it = map.entrySet().iterator();
 			while (it.hasNext()) {
@@ -56,6 +57,12 @@ public class ForecastDAO {
 				Map.Entry pair = (Map.Entry) it.next();
 				if ((int) pair.getValue() > 0) {
 					@SuppressWarnings("unused")
+=======
+			Iterator it = map.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry pair = (Map.Entry) it.next();
+				if ((int) pair.getValue() > 0) {
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 					Integer stockKey = (Integer) pair.getKey();
 					Stock s = this.getStockFromId(Integer.toUnsignedLong((int) pair.getKey()));
 					logger.info("unsold shares::" + s.getStockName());

@@ -52,7 +52,10 @@ public class UserAuthDAO
 		TypedQuery<User> query = this.entityManager.createQuery("SELECT u from User u where u.email = ?1", User.class);
 		query.setParameter(1, email);
 		query.setMaxResults(1);
+<<<<<<< HEAD
 		logger.info("user reslut : {}",query.getSingleResult());
+=======
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 		return query.getSingleResult();
     }
 

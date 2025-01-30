@@ -14,7 +14,10 @@ import com.neu.edu.stocktrading.util.SessionManagementUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.http.HttpStatus;
+=======
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,9 +27,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+<<<<<<< HEAD
 public class WatchListController {
 
     private static final Logger logger = LoggerFactory.getLogger(WatchListController.class);
+=======
+public class WatchListController
+{
+    private static final Logger logger = LoggerFactory.getLogger(WatchListController.class);
+    
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 
     @Autowired
     private WatchListService watchListService;
@@ -34,6 +44,7 @@ public class WatchListController {
     @Autowired
     private SessionManagementUtil sessionMgmtUtils;
 
+<<<<<<< HEAD
     @PostMapping(value = "/watchlist.htm", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addToWatchList(HttpServletRequest request, @RequestBody HashMap<String, String> stockSymbol) {
         try {
@@ -88,6 +99,40 @@ public class WatchListController {
 
 
         Set<Stock> stockList= this.watchListService.retrieveWatchList(user);
+=======
+    @PostMapping(value = "/watchlist.htm" , consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addToWatchList (HttpServletRequest request , @RequestBody HashMap<String, String> stockSymbol)
+    {
+        logger.info("addToWatchList::"+stockSymbol.get("symbol"));
+        String email = (String) request.getSession().getAttribute("user");
+        User user = this.watchListService.getProfileAttributes(email);
+
+
+        boolean result = this.watchListService.addStockToWatchList (user , stockSymbol.get("symbol"));
+        Map<String , String> res = new HashMap<String, String>();
+        res.put("result", "Success");
+        return ResponseEntity.ok(res);
+    }
+
+    @GetMapping(value = "/watchlist.htm" )
+    public ModelAndView retrieveWatchList (HttpServletRequest request )
+    {
+        if (!this.sessionMgmtUtils.doesSessionExist(request)) 
+        {
+            logger.info("Please login to access this page");
+            ModelAndView mv = new ModelAndView("login-form");
+            mv.addObject("user", new User());
+            mv.addObject("errorMessage", "Please login to access this page");
+            return mv;
+
+        }
+
+        String email = (String) request.getSession().getAttribute("user");
+        User user = this.watchListService.getProfileAttributes(email);
+
+
+        Set<Stock> stockList= this.watchListService.retrieveWatchList (user);
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
         logger.info("Returned stocklist from watch::"+stockList.size());
 
         ModelAndView mv = new ModelAndView("stock-watchlist");

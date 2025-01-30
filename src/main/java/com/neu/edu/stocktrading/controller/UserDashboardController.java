@@ -65,7 +65,10 @@ public class UserDashboardController
 
         String[] selling = request.getParameterValues("checkedRows");
 
+<<<<<<< HEAD
         @SuppressWarnings({ "unused", "unchecked" })
+=======
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
         Map<String, List<? extends Object>> stockList = (Map<String, List<? extends Object>>) request.getSession()
                 .getAttribute("stockList");
 

@@ -53,7 +53,10 @@ public class UserAuthService {
 		User user = null;
 		try {
 			user = this.userAuthDAO.getProfileAttributes(u.getEmail());
+<<<<<<< HEAD
 			logger.info("User: {}",user);
+=======
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 		} catch (Exception e) {
 			logger.error(e.toString());
 			user = null;

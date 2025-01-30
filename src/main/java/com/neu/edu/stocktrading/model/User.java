@@ -12,9 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+<<<<<<< HEAD
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Email;
+=======
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 
 @Entity
 @Table(name = "user")
@@ -145,7 +151,11 @@ public class User
      * @return the watchList
      */
     public WatchList getWatchList() {
+<<<<<<< HEAD
         return this.watchList;
+=======
+        return watchList;
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
     }
 
     /**

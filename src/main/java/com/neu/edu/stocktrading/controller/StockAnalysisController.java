@@ -48,9 +48,13 @@ public class StockAnalysisController
         User user = this.stockAnalysisService.getProfileAttributes(email);
 
         Map<String, List<? extends Object>> stockList = this.stockAnalysisService.retrieveSellList(user);
+<<<<<<< HEAD
         @SuppressWarnings("unchecked")
         List<Stock> sellStocks = (List<Stock>) stockList.get("Sell");
         @SuppressWarnings("unchecked")
+=======
+        List<Stock> sellStocks = (List<Stock>) stockList.get("Sell");
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
         List<Integer> sellAmount = (List<Integer>) stockList.get("Amount");
 
         List<Stock> potentialBuyList = this.stockAnalysisService.getPotentialBuyFromWatchlist(user, sellStocks);

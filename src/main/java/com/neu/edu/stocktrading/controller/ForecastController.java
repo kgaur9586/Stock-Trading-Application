@@ -52,7 +52,10 @@ public class ForecastController
         User user = this.forecastService.getProfileAttributes(email);
 
         Map<String, List<? extends Object>> stockList = this.forecastService.retrieveSellList(user);
+<<<<<<< HEAD
         @SuppressWarnings("unchecked")
+=======
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
         List<Stock> sellStocks = (List<Stock>) stockList.get("Sell");
 
         List<Stock> recos = new ArrayList<Stock>();
@@ -77,7 +80,10 @@ public class ForecastController
         User user = this.forecastService.getProfileAttributes(email);
 
 
+<<<<<<< HEAD
         @SuppressWarnings("unused")
+=======
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
         boolean result = this.forecastService.addStockToWatchList (user , stockSymbol.get("symbol"));
         Map<String , String> res = new HashMap<String, String>();
         res.put("result", "Success");

@@ -46,7 +46,11 @@ public class UserAuthController {
 
     @PostMapping(value = "/register.htm")
     public ModelAndView registerUser(HttpServletRequest request,
+<<<<<<< HEAD
             HttpServletResponse response, @ModelAttribute @Validated User user, BindingResult bindingResult,
+=======
+            HttpServletResponse response, @ModelAttribute("user") @Validated User user, BindingResult bindingResult,
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
             ModelMap map) throws IllegalStateException, IOException {
 
         registerUserValidator.validate(user, bindingResult);
@@ -94,6 +98,7 @@ public class UserAuthController {
     @PostMapping(value = "/login.htm")
     public ModelAndView loginUser(HttpServletRequest request, HttpServletResponse response,
             @ModelAttribute("user") @Validated LoginForm loginForm, BindingResult bindingResult) {
+<<<<<<< HEAD
     	logger.info("inside login post method");
         if (bindingResult.hasErrors()) {
             return new ModelAndView("login-form");
@@ -103,6 +108,16 @@ public class UserAuthController {
         	logger.info("is admin true : {}",this.userAuthService.isAdmin(loginForm));
         	logger.info("authentication is true {}",this.userAuthService.authenticate(loginForm));
         	if (this.userAuthService.isAdmin(loginForm) == true) {
+=======
+
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("login-form");
+        }
+
+        if (!this.sessionMgmtUtils.doesSessionExist(request)) {
+
+            if (this.userAuthService.isAdmin(loginForm) == true) {
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
                 logger.info("Admin login");
                 this.sessionMgmtUtils.createNewSessionForUser(request, loginForm.getEmail());
                 ModelAndView mv = new ModelAndView("redirect:/");
@@ -111,6 +126,7 @@ public class UserAuthController {
             } else if (this.userAuthService.authenticate(loginForm) == true) {
                 logger.info("Successfully authenticated");
                 this.sessionMgmtUtils.createNewSessionForUser(request, loginForm.getEmail());
+<<<<<<< HEAD
                 logger.info("new session created");
                 ModelAndView mv = new ModelAndView("redirect:/");
                 logger.info("is user verified : {}",this.userAuthService.isUserVerified(loginForm));
@@ -120,6 +136,14 @@ public class UserAuthController {
 //                    request.getSession().setAttribute("verified", "no");
 //                }
                 request.getSession().setAttribute("verified", "yes");
+=======
+                ModelAndView mv = new ModelAndView("redirect:/");
+                if (this.userAuthService.isUserVerified(loginForm)) {
+                    request.getSession().setAttribute("verified", "yes");
+                } else {
+                    request.getSession().setAttribute("verified", "no");
+                }
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
                 return mv;
 
             } else {
@@ -129,9 +153,17 @@ public class UserAuthController {
                 mv.addObject("errorMessage", "Invalid credentails. Please try again.");
                 return mv;
             }
+<<<<<<< HEAD
         }
         ModelAndView mv = new ModelAndView("redirect:/");
         return mv;
+=======
+
+        }
+        ModelAndView mv = new ModelAndView("redirect:/");
+        return mv;
+
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
     }
 
     @RequestMapping(value = "/logout.htm")

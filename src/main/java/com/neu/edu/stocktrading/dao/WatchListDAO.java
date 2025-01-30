@@ -37,6 +37,7 @@ public class WatchListDAO
     public boolean addStockToWatchList(User user, String stockSymbol) 
     {
         logger.info("addStockToWatchList::"+stockSymbol);
+<<<<<<< HEAD
         logger.info("addStockToWatchList in DAO::"+user.getFirstName());
         logger.info("before stock initialization");        
         Stock st = null;
@@ -46,6 +47,13 @@ public class WatchListDAO
             st=checkIfStockExists(stockSymbol);
         } catch (Exception e) {
         	logger.info("excemption occur");
+=======
+        logger.info("addStockToWatchList::"+user.getFirstName());
+        Stock st = null;
+        try {
+            st=checkIfStockExists(stockSymbol);
+        } catch (Exception e) {
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
             st=null;
         }
 
@@ -97,7 +105,10 @@ public class WatchListDAO
         Set<Stock> stockList = new HashSet<Stock>();
 
         WatchList wt = user.getWatchList();
+<<<<<<< HEAD
         logger.info("watchlist is here: {}",wt);
+=======
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
         if (wt ==null)
         {
             return new HashSet<Stock>();

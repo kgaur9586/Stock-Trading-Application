@@ -29,11 +29,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @SuppressWarnings("unused")
+=======
+import org.springframework.web.servlet.ModelAndView;
+
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 @Controller
 public class StockTradeController {
     private static final Logger logger = LoggerFactory.getLogger(StockTradeController.class);
@@ -64,18 +69,27 @@ public class StockTradeController {
 
     }
 
+<<<<<<< HEAD
 
     @PostMapping(value = "/trade/watchlist.htm", consumes = "multipart/form-data")
     public ModelAndView addToTrade(HttpServletRequest request,
                                    @RequestParam("checkedRows") String[] stockSymbols) {
+=======
+    @PostMapping(value = "/trade/watchlist.htm")
+    public ModelAndView addToTrade(HttpServletRequest request) {
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
         logger.info("addToTrade::");
         String email = (String) request.getSession().getAttribute("user");
         User user = this.stockTradeService.getProfileAttributes(email);
 
+<<<<<<< HEAD
         // Handle file upload
 //        if (!file.isEmpty()) {
 //            // Process the uploaded file
 //        }
+=======
+        String[] stockSymbols = request.getParameterValues("checkedRows");
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
 
         Map<String, List<? extends Object>> stockList = this.stockTradeService.retrieveBuyList(user, stockSymbols);
         ModelAndView mv = new ModelAndView();
@@ -87,8 +101,11 @@ public class StockTradeController {
         return mv;
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
     @PostMapping(value = "/trade/transaction.htm")
     public ModelAndView showTradeTransaction(HttpServletRequest request) {
         logger.info("showTradeTransaction::");
@@ -99,7 +116,10 @@ public class StockTradeController {
 
         String[] selling = request.getParameterValues("checkedRows");
 
+<<<<<<< HEAD
         @SuppressWarnings("unchecked")
+=======
+>>>>>>> bfa3d0c092865e6b8aacd1af30606a372ba3957f
         Map<String, List<? extends Object>> stockList = (Map<String, List<? extends Object>>) request.getSession()
                 .getAttribute("stockList");
 
